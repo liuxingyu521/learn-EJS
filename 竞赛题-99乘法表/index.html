@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>EJS Practice</title>
+	<style >
+		#test{
+			font-size: 0;
+			margin: 30px auto;
+			width: 520px;
+		}
+		#test span{
+	    display: inline-block;
+	    width: 55px;
+	    height: 25px;
+	    line-height: 25px;
+	    text-align: center;
+	    font-size: 12px;
+	    border: 1px solid #ccc;
+	    margin: -1px 0 0 -1px;
+	    font-family: Consolas;
+	    visibility: hidden;
+		}
+	</style>
+</head>
+<body>
+	<div id="test">
+		<script type="text/html" id="template">
+			[% for(var i = 1; i < 10; i++){ %]
+					[% for(var j = 1; j <= i; j++){ %]
+								<span>[%= j %]*[%= i %]=[%= i*j %]</span>
+								[% if(i == j){ %]
+											<br>
+								[% }%]
+					[% }%]
+			[% }%]
+		</script>
+	</div>
+	<script src="../libs/ejs.js"></script>
+	<script type="text/javascript">
+	window.onload = function(){
+		var data = {
+			list: [
+				{
+					name: "Bob",
+					age: 23
+				},
+				{
+					name: "Smith",
+					age: 20
+				}
+			]
+		}
+
+		var options = {
+			element: 'template'
+		}
+
+		console.time('render');
+		var html = new EJS(options).render();
+
+
+		document.getElementById('test').innerHTML = html;
+
+
+		var spanArr = document.getElementsByTagName('span');
+
+		var i = 0, l = spanArr.length;
+		timer = setInterval(function(){
+			if(i == l*2){
+				clearInterval(timer);
+				for(var j = 0; j < l; j++){
+					spanArr[j].style.visibility = 'visible';
+				}
+			}else if(i < l){
+				spanArr[i].style.visibility = 'visible';
+				i++;
+			}else{
+				spanArr[2*l - i - 1].style.visibility = 'hidden';
+				i++;
+			}
+		}, 100)
+		console.timeEnd('render')
+
+		var updateData = {
+			list: [
+				{
+					name: "Alice",
+					age: 33
+				},
+				{
+					name: "John",
+					age: 40
+				}
+			]
+		}
+		// document.getElementsByTagName('button')[0].onclick = function(){
+		// 	new EJS(options).update('test', updateData);
+		// }
+	}
+
+
+	</script>
+</body>
+</html>
